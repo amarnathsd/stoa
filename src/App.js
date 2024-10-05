@@ -165,7 +165,7 @@ function App() {
         <div className="">
           <div className="bg-[#4d0210]  justify-center items-center">
             <div className="container mx-auto py-8  justify-between items-start px-6 px-12">
-              <div className="text-white w-3/6 ">
+              <div className="text-white w-3/6 mt-4">
                 <h2 className="text-2xl ms-5">Stoa</h2>
                 <p className="text-sm w-3/6 text-stone-500">
                   Asia's best altertive to an MBA
@@ -183,7 +183,7 @@ function App() {
                   <img src={CutOut} alt="Founder" className="w-2/3" />
                 </div>
               </div>
-              <div className="absolute top-[200px] left-[670px] bg-white rounded p-4 shadow-lg w-3/12 mt-8 mt-0">
+              <div className="absolute top-[200px] right-[45px] bg-white rounded p-4 shadow-lg w-3/12 mt-8 mt-0">
                 <h2 className="text-sm text-red-900 font-semibold ">
                   Talk to our team and get your profile evaluated.
                 </h2>
