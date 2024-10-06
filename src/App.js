@@ -198,9 +198,9 @@ function App() {
     <div className="">
       <div className="">
         <div className="">
-          <div className="bg-[#4d0210] rounded justify-center items-center">
+          <div className="bg-[#4d0210] justify-center items-center">
             <div className="container mx-auto py-6  justify-between items-start px-6 px-12">
-              <div className="text-white w-7/12 ms-12 mt-4">
+              <div className="text-white w-7/12 ms-12">
                 <h2 className="flex text-4xl  mb-3">
                   <img src={stoa} alt="stoa" className="h-7 mt-1 pe-2" />
                   Stoa
@@ -218,10 +218,10 @@ function App() {
                   access career services.
                 </p>
                 <div className="flex justify-end">
-                  <img src={CutOut} alt="Founder" className="w-2/3" />
+                  <img src={CutOut} alt="Founder" className="w-5/12" />
                 </div>
               </div>
-              <div className="absolute top-[270px] right-[75px] bg-white rounded p-4 shadow-lg w-3/12 mt-8 mt-0">
+              <div className="absolute top-[160px] right-[75px] bg-white rounded p-4 shadow-lg w-2/12 mt-8 mt-0">
                 <h2 className="text-sm text-red-900 font-semibold ">
                   Talk to our team and get your profile evaluated.
                 </h2>
