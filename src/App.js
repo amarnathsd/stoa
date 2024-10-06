@@ -222,7 +222,7 @@ function App() {
                   <img src={CutOut} alt="Founder" className="w-6/12" />
                 </div>
               </div>
-              <div className="absolute top-[160px] right-[105px] bg-white rounded p-4 shadow-lg  w-3/12 mt-8 mt-0">
+              <div className="absolute top-[200px] right-[105px] bg-white rounded p-4 shadow-lg  w-3/12 mt-8 mt-0">
                 <h2 className="text-sm text-red-900 font-semibold ">
                   Talk to our team and get your profile evaluated.
                 </h2>
