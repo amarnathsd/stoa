@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import CutOut from "./assets/Images/Cut  Out.png";
 import Logo from "./assets/Images/swiggy.png";
 import person from "./assets/Images/Business.jpg";
 import GroupImg from "./assets/Images/group photo.png";
+import stoa from "./assets/Images/stoa.png";
+import { FaChevronDown } from "react-icons/fa";
+import USAImg from "./assets/Images/USA Img.png";
+import Stoablack from "./assets/Images/Stoa-black.png";
 
 function App() {
   const companies = [
@@ -159,22 +163,56 @@ function App() {
   ];
 
   const [openIndex, setOpenIndex] = useState(null);
+  const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState({
+    countryCode: "+1",
+    flagUrl: USAImg,
+  });
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    fetch("https://restcountries.com/v3.1/all")
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedCountries = data.map((country) => ({
+          name: country.name.common,
+          code: country.idd.root
+            ? country.idd.root +
+              (country.idd.suffixes ? country.idd.suffixes[0] : "")
+            : "",
+          flag: country.flags.svg,
+        }));
+        setCountries(formattedCountries);
+      })
+      .catch((error) => console.error("Error fetching country data:", error));
+  }, []);
+
+  const handleCountryChange = (country) => {
+    setSelectedCountry({
+      countryCode: country.code,
+      flagUrl: country.flag,
+    });
+    setDropdownOpen(false);
+  };
   return (
     <div className="">
       <div className="">
         <div className="">
-          <div className="bg-[#4d0210]  justify-center items-center">
-            <div className="container mx-auto py-8  justify-between items-start px-6 px-12">
-              <div className="text-white w-3/6 mt-4">
-                <h2 className="text-2xl ms-5">Stoa</h2>
-                <p className="text-sm w-3/6 text-stone-500">
+          <div className="bg-[#4d0210] rounded justify-center items-center">
+            <div className="container mx-auto py-6  justify-between items-start px-6 px-12">
+              <div className="text-white w-7/12 ms-12 mt-4">
+                <h2 className="flex text-4xl  mb-3">
+                  <img src={stoa} alt="stoa" className="h-7 mt-1 pe-2" />
+                  Stoa
+                </h2>
+                <p className="text-xs ms-1 w-3/6 text-gray-300">
                   Asia's best altertive to an MBA
                 </p>
                 <h1 className="text-4xl font-medium  leading-tight">
                   Online MBA is dull, unlike Stoa. Change your career trajectory
                   in 24 weeks.
                 </h1>
-                <p className="text-sm w-3/6 text-stone-500">
+                <p className="text-sm w-2/6 text-gray-300">
                   Learn business skills by doing, build proof of work & get
                   feedback, join a community of 1000+ active professionals, and
                   access career services.
@@ -183,7 +221,7 @@ function App() {
                   <img src={CutOut} alt="Founder" className="w-2/3" />
                 </div>
               </div>
-              <div className="absolute top-[200px] right-[45px] bg-white rounded p-4 shadow-lg w-3/12 mt-8 mt-0">
+              <div className="absolute top-[270px] right-[75px] bg-white rounded p-4 shadow-lg w-3/12 mt-8 mt-0">
                 <h2 className="text-sm text-red-900 font-semibold ">
                   Talk to our team and get your profile evaluated.
                 </h2>
@@ -195,60 +233,103 @@ function App() {
                     <input
                       type="text"
                       placeholder="First Name"
-                      className="w-1/2 px-4 py-0 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-0 border"
                     />
                     <input
                       type="text"
                       placeholder="Last Name"
-                      className="w-1/2 px-4 py-2 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-2 border"
                     />
                   </div>
                   <div className="flex space-x-4">
                     <input
                       type="email"
                       placeholder="Email ID"
-                      className="w-1/2 px-4 py-2 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-2 border"
                     />
                     <input
                       type="text"
                       placeholder="City"
-                      className="w-1/2 px-4 py-2 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-2 border"
                     />
                   </div>
-                  <div className="flex space-x-4">
-                    <input
-                      type="text"
-                      placeholder="Phone Number"
-                      className="w-full px-4 py-2 border"
-                    />
+                  <div>
+                    <div className="flex items-center border px-4 rounded-md">
+                      <img
+                        src={selectedCountry.flagUrl}
+                        alt="Country Flag"
+                        className="w-5 h-3 mr-1"
+                      />
+                      <span className="mr-2">
+                        {selectedCountry.countryCode}
+                      </span>
+
+                      <div className="relative">
+                        <FaChevronDown
+                          className="cursor-pointer"
+                          onClick={() => setDropdownOpen(!dropdownOpen)}
+                        />
+                        {dropdownOpen && (
+                          <div className="absolute top-full left-0 mt-2 w-70 bg-white border rounded-md z-10 max-h-64 overflow-y-auto">
+                            {countries.map((country) => (
+                              <div
+                                key={country.name}
+                                className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                onClick={() => handleCountryChange(country)}
+                              >
+                                <img
+                                  src={country.flag}
+                                  alt={country.name}
+                                  className="w-5 h-3 mr-2"
+                                />
+                                <span className="text-xs">
+                                  {country.name} ({country.code})
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Phone Number"
+                        className="placeholder-text-xs w-full px- py-2 ml-4"
+                      />
+                    </div>
                   </div>
                   <div className="flex space-x-4">
-                    <input
-                      type="text"
-                      placeholder="Work Exp."
-                      className="w-1/2 px-4 py-2 border"
-                    />
+                    <div className="relative w-1/2 border" placeholder="">
+                      <select className="text-xs w-full px-4 py-1 appearance-none focus:outline-none">
+                        <option value="text-xxs" disabled selected>
+                        </option>
+                        <option >Fresher</option>
+                        <option >{"< 2 Years"}</option>
+                        <option >2-5 Years</option>
+                        <option >{"> 5 Years"}</option>
+                      </select>
+                      <FaChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+                    </div>
                     <input
                       type="text"
                       placeholder="Job Title"
-                      className="w-1/2 px-4 py-2 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-2 border"
                     />
                   </div>
                   <div className="flex space-x-4">
                     <input
                       type="text"
                       placeholder="Job Function"
-                      className="w-1/2 px-4 py-2 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-2 border"
                     />
                     <input
                       type="text"
                       placeholder="Current CTC"
-                      className="w-1/2 px-4 py-2 border"
+                      className="placeholder-text-xs w-1/2 px-4 py-2 border"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
                     <input type="checkbox" id="consent" />
-                    <label className="text-xs mt-3">
+                    <label className="text-xxs mt-3">
                       I allow Stoa to contact me regarding their offerings via
                       email, WhatsApp, and call.
                     </label>
@@ -259,93 +340,107 @@ function App() {
                   >
                     TALK TO US
                   </button>
-                  <p className="text-xs ms-3 text-stone-500">
+                  <p className="text-xxs ms-3 text-stone-500">
                     THE FIRST STEP OF 1000+ HAPPY STOANS
                   </p>
                 </form>
               </div>
             </div>
           </div>
-          <div className="bg-[#f3e4ce] min-h-screen ms-12 z-index-5 w-7/12">
-            <div className="bg-[#dec49e] p-7 -mt-8  ">
-              <div className="grid grid-cols-2 grid-cols-3 text-center ">
-                <div className="border-b border-red-700 pb-2">
+          <div className="bg-[#f3e4ce] ms-12  z-20 w-7/12">
+            <div className="bg-[#dec49e] p-7 z-20 -mt-6 rounded ">
+              <div className="grid grid-cols-2 z-20 grid-cols-3 text-center ">
+                <div className="border-b text-left border-gray-400 pb-2">
                   <h2 className="text-red-700 font-bold  text-sm">6 months</h2>
-                  <p className="text-sm text-red-700 font-bold">
+                  <p className="text-xxs text-red-700 font-bold">
                     ONLINE PROGRAM
                   </p>
                 </div>
-                <div className="border-b border-red-700">
-                  <h2 className="text-red-700 font-bold text-sm">
+                <div className="border-b  border-gray-400 text-left">
+                  <h2 className="text-red-700 ps-2 font-bold text-sm border-s border-gray-400">
                     3 day induction
                   </h2>
-                  <p className="text-sm text-red-700 font-bold">
+                  <p className="text-xxs text-left text-red-700 font-bold  ps-2 border-s border-gray-400">
                     OFFLINE IN BANGALORE
                   </p>
                 </div>
-                <div className="border-b border-red-700">
-                  <h2 className="text-red-700 font-bold text-sm">10-12 hrs</h2>
-                  <p className="text-sm text-red-700 font-bold">
+                <div className="border-b text-left border-gray-400">
+                  <h2 className="text-red-700 font-bold text-sm ps-2 border-s border-gray-400">
+                    10-12 hrs
+                  </h2>
+                  <p className="text-xxs text-red-700 font-bold ps-2 border-s border-gray-400">
                     ONLINE PER WEEK
                   </p>
                 </div>
-                <div className="pt-2">
+                <div className="pt-2 text-left">
                   <h2 className="text-red-700 font-bold text-sm">1,000+</h2>
-                  <p className="text-sm text-red-700 font-bold">
+                  <p className="text-xxs text-red-700 font-bold">
                     ALUMNI NETWORK
                   </p>
                 </div>
-                <div className="pt-2">
-                  <h2 className="text-red-700 font-bold text-sm">300+</h2>
-                  <p className="text-sm text-red-700 font-bold">
+                <div className="pt-2 text-left">
+                  <h2 className="text-red-700 font-bold text-sm ps-2 border-s border-gray-400">
+                    300+
+                  </h2>
+                  <p className="text-xxs text-red-700 font-bold ps-2 border-s border-gray-400">
                     HIRING PARTNERS
                   </p>
                 </div>
-                <div className="pt-2">
-                  <h2 className="text-red-700 font-bold text-sm">
-                    2.95L <span className="text-sm">+ 18% GST</span>
+                <div className="pt-2 text-left">
+                  <h2 className="text-red-700 font-bold text-sm ps-2 border-s border-gray-400">
+                    2.95L <span className="text-sm ps-2">+ 18% GST</span>
                   </h2>
-                  <p className="text-sm text-red-700 font-bold">PROGRAM FEE</p>
+                  <p className="text-xxs font-bold text-red-700 ps-2 border-s border-gray-400 ">
+                    PROGRAM FEE
+                  </p>
                 </div>
               </div>
             </div>
-            <div className="bg-white py-2 mt-3">
+            <div className="bg-white py-2 mt-3 rounded">
               <div className="flex justify-start ms-8">
                 <h3 className="text-stone-500 text-lg font-semibold text-center mb-6">
                   Featured in
                 </h3>
               </div>
-              <div className="flex justify-center space-x-10 items-center">
-                <img src="" alt="Times of India" className="h-10 grayscale" />
-                <img src="" alt="The Ken" className="h-10 grayscale" />
-                <img src="" alt="TechCrunch" className="h-10 grayscale" />
+              <div className="flex justify-between px-10 items-center">
                 <img
-                  src=""
+                  src={Logo}
+                  alt="Times of India"
+                  className="w-20 h-10 grayscale"
+                />
+                <img src={Logo} alt="The Ken" className="h-10 w-20 grayscale" />
+                <img
+                  src={Logo}
+                  alt="TechCrunch"
+                  className="h-10 w-20 grayscale"
+                />
+                <img
+                  src={Logo}
                   alt="The Economic Times"
-                  className="h-10 grayscale"
+                  className="h-10 w-20 grayscale"
                 />
               </div>
             </div>
-            <div className="bg-green-900 p-10 mt-3">
+            <div className="bg-green-900 p-10 mt-3 rounded">
               <h2 className="text-white text-lg font-bold mb-6">
                 Careers after Stoa
               </h2>
               <div className="flex justify-between mb-10">
                 <div className="content-start bg-green-700 text-white p-3 px-6 rounded-md text-center">
                   <p className="text-xxs">AVG RISE IN SALARY</p>
-                  <h3 className="text-xl font-bold">62%</h3>
+                  <h3 className="text-sm font-bold">62%</h3>
                 </div>
                 <div className="bg-green-700 text-white p-3 px-6 rounded-md text-center">
                   <p className="text-xxs">AVG SALARY</p>
-                  <h3 className="text-xl font-bold">12.7 LPA</h3>
+                  <h3 className="text-sm font-bold">12.7 LPA</h3>
                 </div>
                 <div className="bg-green-700 text-white p-3 px-6 rounded-md text-center">
                   <p className="text-xxs">MEDIAN SALARY</p>
-                  <h3 className="text-xl font-bold">11.5 LPA</h3>
+                  <h3 className="text-sm font-bold">11.5 LPA</h3>
                 </div>
                 <div className="bg-green-700 text-white p-3 px-6 rounded-md text-center">
                   <p className="text-xxs">HIGHEST SALARY</p>
-                  <h3 className="text-xl font-bold">20 LPA</h3>
+                  <h3 className="text-sm font-bold">20 LPA</h3>
                 </div>
               </div>
               <div className="grid grid-cols-6 gap-6">
@@ -363,8 +458,8 @@ function App() {
                 ))}
               </div>
             </div>
-            <div className="bg-white mt-3 p-8">
-              <h1 className="text-2xl font-bold mb-6">
+            <div className="bg-white mt-3 p-8 rounded">
+              <h1 className="ms-8 text-red-700 text-md font-bold mb-6">
                 Faculty with real-world experience
               </h1>
               <div className="grid grid-cols-4 gap-6">
@@ -381,11 +476,11 @@ function App() {
                     <img
                       src={member.company}
                       alt={`${member.name}-company`}
-                      className="bg-stone-400 absolute right-[20px] top-[13px] h-5 w-8 mt-2 object-contain"
+                      className="bg-stone-400  text-left absolute right-[20px] top-[13px] h-5 w-8 mt-2 object-contain"
                     />
                     <div>
                       <h3 className="font-bold text-xs">{member.name}</h3>
-                      <p className="content-start text-xxs text-gray-600">
+                      <p className=" text-left ms-3 content-start text-xxs text-gray-600">
                         {member.designation}
                       </p>
                     </div>
@@ -398,12 +493,12 @@ function App() {
                 <img src={GroupImg} alt="Group Imahge" />
               </div>
             </div>
-            <div className="bg-[#edc88f] border-stone-700 border-2 mt-3">
+            <div className="bg-[#edc88f] rounded border-stone-700 border-2 mt-3">
               <div className=" ms-6 py-5">
-                <h1 className="text-red-700 mb-3 font-bold ">
+                <h1 className="text-red-700 mb-3 text-xs font-bold ">
                   Here from alumini
                 </h1>
-                <p className="text-sm px-3 text-justify">
+                <p className="text-xs  text-justify pe-4">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -426,8 +521,8 @@ function App() {
                 </div>
               </div>
             </div>
-            <div className="bg-white p- mt-3">
-              <h1 className="text-lg mb-2 p-2 font-bold text-red-600">
+            <div className="bg-white rounded p-2 mt-3">
+              <h1 className="text-lg mb-2 ms-3 p-2 font-bold text-red-600">
                 Backed by the best
               </h1>
               <div className="grid grid-cols-6  justify-items-center">
@@ -446,11 +541,15 @@ function App() {
                   </div>
                 ))}
               </div>
-              {/* <p className="text-center text-lg text-gray-600">and many more</p> */}
+              <div className="flex justify-start ms-4">
+                <p className="text-center text-black font-bold text-xs p-2 text-gray-600">
+                  and many more
+                </p>
+              </div>
             </div>
           </div>
         </div>
-        <div className="bg-[#3c0a0b] min-h-screen flex mt-3 mx-12 justify-center items-center">
+        <div className="bg-[#3c0a0b] rounded min-h-screen flex mt-3 mx-2 justify-center items-center">
           <div className="text-white max-w-screen-md p-6 pt-12">
             <h1 className="text-4xl font-bold mb-1 text-center">
               Ready to level up?
@@ -533,7 +632,7 @@ function App() {
         </div>
 
         <div>
-          <div className="mt-3 mx-11 bg-[#f8f1e1] p-6  shadow-lg">
+          <div className="mt-3 bg-[#f8f1e1] p-6  shadow-lg">
             <h1 className="text-center text-4xl">FAQs</h1>
             {faqData.map((faq, index) => (
               <div key={index} className="border-b border-gray-300 py-4">
@@ -561,11 +660,11 @@ function App() {
             ))}
           </div>
         </div>
-        <footer className="bg-black text-white py-8 px-5 mx-12 mt-3">
+        <footer className="bg-black text-white py-8 px-16">
           <div className="container mx-auto n items-center">
             <div className="flex justify-between">
-              <div className="flex items-center space-x-4">
-                <img src={Logo} alt="Stoa Logo" className="w-12 h-12" />
+              <div className="flex items-center">
+                <img src={Stoablack} alt="Stoa Logo" className="w-12 h-12" />
                 <span className="text-2xl font-bold">stoa</span>
               </div>
               <div className="flex flex-row space-x-8 text-lg m-4 ">
