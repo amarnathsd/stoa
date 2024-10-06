@@ -212,16 +212,17 @@ function App() {
                   Online MBA is dull, unlike Stoa. Change your career trajectory
                   in 24 weeks.
                 </h1>
-                <p className="text-sm w-2/6 text-gray-300">
-                  Learn business skills by doing, build proof of work & get
-                  feedback, join a community of 1000+ active professionals, and
-                  access career services.
-                </p>
-                <div className="flex justify-end">
-                  <img src={CutOut} alt="Founder" className="w-5/12" />
+                <div className="flex justify-between">
+                  <p className="text-sm w-2/6 text-gray-300">
+                    Learn business skills by doing, build proof of work & get
+                    feedback, join a community of 1000+ active professionals,
+                    and access career services.
+                  </p>
+
+                  <img src={CutOut} alt="Founder" className="w-6/12" />
                 </div>
               </div>
-              <div className="absolute top-[160px] right-[75px] bg-white rounded p-4 shadow-lg w-2/12 mt-8 mt-0">
+              <div className="absolute top-[160px] right-[105px] bg-white rounded p-4 shadow-lg  w-3/12 mt-8 mt-0">
                 <h2 className="text-sm text-red-900 font-semibold ">
                   Talk to our team and get your profile evaluated.
                 </h2>
@@ -300,12 +301,11 @@ function App() {
                   <div className="flex space-x-4">
                     <div className="relative w-1/2 border" placeholder="">
                       <select className="text-xs w-full px-4 py-1 appearance-none focus:outline-none">
-                        <option value="text-xxs" disabled selected>
-                        </option>
-                        <option >Fresher</option>
-                        <option >{"< 2 Years"}</option>
-                        <option >2-5 Years</option>
-                        <option >{"> 5 Years"}</option>
+                        <option value="text-xxs" disabled selected></option>
+                        <option>Fresher</option>
+                        <option>{"< 2 Years"}</option>
+                        <option>2-5 Years</option>
+                        <option>{"> 5 Years"}</option>
                       </select>
                       <FaChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none" />
                     </div>
